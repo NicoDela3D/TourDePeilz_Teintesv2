@@ -12,8 +12,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const MAX_WIDTH = 800; // Set your desired maximum width
     const MAX_HEIGHT = 600; // Set your desired maximum height
 
-    image.src = 'images/Aerienne - Provisoire.jpg';
-    mask.src = 'images/Aerienne - Provisoire Masque toles.jpg';
+    image.crossOrigin = "Anonymous"; // Ensure CORS is handled
+    mask.crossOrigin = "Anonymous";  // Ensure CORS is handled
+
+    image.src = 'images/aerienneBase.jpg';
+    mask.src = 'images/aerienneMask1.jpg';
 
     image.onload = function () {
         console.log("Base image loaded.");
