@@ -78,9 +78,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         ctx.putImageData(imageData, 0, 0);
-        mainCtx.globalCompositeOperation = 'multiply';
-        mainCtx.drawImage(maskCanvas, 0, 0, mainCanvas.width, mainCanvas.height);
         mainCtx.globalCompositeOperation = 'source-over';
+        mainCtx.drawImage(maskCanvas, 0, 0, mainCanvas.width, mainCanvas.height);
     }
 
     function hexToR(h) { return parseInt(h.slice(1, 3), 16); }
