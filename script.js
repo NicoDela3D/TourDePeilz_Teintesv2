@@ -86,7 +86,7 @@ window.onload = function () {
         }
 
         maskCtx.putImageData(imageData, 0, 0);
-        mainCtx.globalCompositeOperation = 'multiply'; // Use multiply blend mode
+        mainCtx.globalCompositeOperation = 'screen'; // Use multiply blend mode
         mainCtx.drawImage(maskCanvas, 0, 0);
         mainCtx.globalCompositeOperation = 'source-over'; // Reset blend mode to default
     }
