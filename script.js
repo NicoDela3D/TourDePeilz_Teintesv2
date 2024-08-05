@@ -67,7 +67,7 @@ window.onload = function () {
         updateCanvas();
     }
 
-    colorPicker.addEventListener('input', debounce(updateCanvas, 100));
+    colorPicker.addEventListener('input', updateCanvas);
 
     function updateCanvas() {
         console.log("Updating canvas with color:", colorPicker.value);
@@ -92,9 +92,9 @@ window.onload = function () {
         // Apply the color to the alpha pixels of the mask
         for (let i = 0; i < data.length; i += 4) {
             if (data[i + 3] > 0) { // If alpha > 0
-                data[i] = (data[i] * r) / 255;     // Red
-                data[i + 1] = (data[i + 1] * g) / 255; // Green
-                data[i + 2] = (data[i + 2] * b) / 255; // Blue
+                data[i] = r;     // Red
+                data[i + 1] = g; // Green
+                data[i + 2] = b; // Blue
             }
         }
 
