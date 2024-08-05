@@ -12,8 +12,8 @@ window.onload = function () {
     const baseImage = new Image();
     const maskImage = new Image();
 
-    const MAX_WIDTH = 1920;
-    const MAX_HEIGHT = 1080;
+    const MAX_WIDTH = 800;
+    const MAX_HEIGHT = 600;
 
     baseImage.crossOrigin = "Anonymous";
     maskImage.crossOrigin = "Anonymous";
@@ -79,14 +79,14 @@ window.onload = function () {
 
         for (let i = 0; i < data.length; i += 4) {
             if (data[i + 3] > 0) { // If alpha > 0
-                data[i] = (data[i] * r) / 255;     // Red
-                data[i + 1] = (data[i + 1] * g) / 255; // Green
-                data[i + 2] = (data[i + 2] * b) / 255; // Blue
+                data[i] = r;     // Red
+                data[i + 1] = g; // Green
+                data[i + 2] = b; // Blue
             }
         }
 
         maskCtx.putImageData(imageData, 0, 0);
-        mainCtx.globalCompositeOperation = 'multiply'; // Use multiply blend mode
+        mainCtx.globalCompositeOperation = 'multiply'; // Use overlay blend mode
         mainCtx.drawImage(maskCanvas, 0, 0);
         mainCtx.globalCompositeOperation = 'source-over'; // Reset blend mode to default
     }
@@ -95,3 +95,4 @@ window.onload = function () {
     function hexToG(h) { return parseInt(h.slice(3, 5), 16); }
     function hexToB(h) { return parseInt(h.slice(5, 7), 16); }
 };
+
