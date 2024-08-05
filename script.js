@@ -9,17 +9,33 @@ document.addEventListener("DOMContentLoaded", function () {
     const image = new Image();
     const mask = new Image();
 
+    const MAX_WIDTH = 800; // Set your desired maximum width
+    const MAX_HEIGHT = 600; // Set your desired maximum height
+
     image.src = 'images/Aerienne - Provisoire.jpg';
     mask.src = 'images/Aerienne - Provisoire Masque toles.jpg';
 
     image.onload = function () {
-        mainCanvas.width = image.width;
-        mainCanvas.height = image.height;
-        maskCanvas.width = image.width;
-        maskCanvas.height = image.height;
+        let { width, height } = image;
+        if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+            const aspectRatio = width / height;
+            if (width > MAX_WIDTH) {
+                width = MAX_WIDTH;
+                height = MAX_WIDTH / aspectRatio;
+            }
+            if (height > MAX_HEIGHT) {
+                height = MAX_HEIGHT;
+                width = MAX_HEIGHT * aspectRatio;
+            }
+        }
 
-        mainCtx.drawImage(image, 0, 0);
-        maskCtx.drawImage(mask, 0, 0);
+        mainCanvas.width = width;
+        mainCanvas.height = height;
+        maskCanvas.width = width;
+        maskCanvas.height = height;
+
+        mainCtx.drawImage(image, 0, 0, width, height);
+        maskCtx.drawImage(mask, 0, 0, width, height);
 
         updateCanvas();
     };
@@ -28,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateCanvas() {
         mainCtx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
-        mainCtx.drawImage(image, 0, 0);
+        mainCtx.drawImage(image, 0, 0, mainCanvas.width, mainCanvas.height);
 
         applyMask(maskCtx, colorPicker.value, maskCanvas);
     }
@@ -47,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         ctx.putImageData(imageData, 0, 0);
         mainCtx.globalCompositeOperation = 'multiply';
-        mainCtx.drawImage(maskCanvas, 0, 0);
+        mainCtx.drawImage(maskCanvas, 0, 0, mainCanvas.width, mainCanvas.height);
         mainCtx.globalCompositeOperation = 'source-over';
     }
 
