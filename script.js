@@ -79,14 +79,19 @@ window.onload = function () {
 
         for (let i = 0; i < data.length; i += 4) {
             if (data[i] > 200 && data[i + 1] > 200 && data[i + 2] > 200 && data[i + 3] > 0) { // If white and alpha > 0
-                data[i] = r;
-                data[i + 1] = g;
-                data[i + 2] = b;
+                data[i] = r;     // Red
+                data[i + 1] = g; // Green
+                data[i + 2] = b; // Blue
             }
         }
 
         maskCtx.putImageData(imageData, 0, 0);
         mainCtx.drawImage(maskCanvas, 0, 0);
+
+        // Blend the mask with the base image
+        mainCtx.globalCompositeOperation = 'multiply';
+        mainCtx.drawImage(maskCanvas, 0, 0);
+        mainCtx.globalCompositeOperation = 'source-over';
     }
 
     function hexToR(h) { return parseInt(h.slice(1, 3), 16); }
