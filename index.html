@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Interactive</title>
+    <style>
+        #canvas-container {
+            position: relative;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container">
+        <canvas id="mainCanvas"></canvas>
+        <canvas id="maskCanvas1"></canvas>
+        <canvas id="maskCanvas2"></canvas>
+        <canvas id="maskCanvas3"></canvas>
+    </div>
+
+    <div>
+        <label for="color1">Couleur 1:</label>
+        <input type="color" id="color1" name="color1">
+        <label for="color2">Couleur 2:</label>
+        <input type="color" id="color2" name="color2">
+        <label for="color3">Couleur 3:</label>
+        <input type="color" id="color3" name="color3">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
