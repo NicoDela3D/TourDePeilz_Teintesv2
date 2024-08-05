@@ -77,6 +77,16 @@ window.onload = function () {
     }
 
     function applyColorMask(color, width, height) {
+        // Reset the mask canvas
+        maskCtx.clearRect(0, 0, width, height);
+        maskCtx.drawImage(maskImage, 0, 0, width, height);
+
+        // Check if the selected color is white
+        if (color.toUpperCase() === '#FFFFFF') {
+            mainCtx.drawImage(maskCanvas, 0, 0, width, height);
+            return;
+        }
+
         // Get the image data from the mask canvas
         const imageData = maskCtx.getImageData(0, 0, width, height);
         const data = imageData.data;
