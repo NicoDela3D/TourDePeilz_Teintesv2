@@ -16,6 +16,18 @@ document.addEventListener("DOMContentLoaded", function () {
     mask.src = 'images/Aerienne - Provisoire Masque toles.jpg';
 
     image.onload = function () {
+        console.log("Base image loaded.");
+        resizeAndDrawImages();
+    };
+
+    mask.onload = function () {
+        console.log("Mask image loaded.");
+        resizeAndDrawImages();
+    };
+
+    function resizeAndDrawImages() {
+        if (!image.complete || !mask.complete) return;
+
         let { width, height } = image;
         if (width > MAX_WIDTH || height > MAX_HEIGHT) {
             const aspectRatio = width / height;
@@ -38,11 +50,12 @@ document.addEventListener("DOMContentLoaded", function () {
         maskCtx.drawImage(mask, 0, 0, width, height);
 
         updateCanvas();
-    };
+    }
 
     colorPicker.addEventListener('input', updateCanvas);
 
     function updateCanvas() {
+        console.log("Updating canvas with color:", colorPicker.value);
         mainCtx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
         mainCtx.drawImage(image, 0, 0, mainCanvas.width, mainCanvas.height);
 
