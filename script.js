@@ -1,9 +1,10 @@
 window.onload = function () {
     const mainCanvas = document.getElementById('mainCanvas');
     const colorPicker = document.getElementById('color1');
+    const exportButton = document.getElementById('exportButton');
 
-    if (!mainCanvas || !colorPicker) {
-        console.error('Cannot find the canvas or color picker elements.');
+    if (!mainCanvas || !colorPicker || !exportButton) {
+        console.error('Cannot find the canvas, color picker, or export button elements.');
         return;
     }
 
@@ -86,13 +87,19 @@ window.onload = function () {
         }
 
         maskCtx.putImageData(imageData, 0, 0);
-        mainCtx.globalCompositeOperation = 'multiply'; // Use overlay blend mode
+        mainCtx.globalCompositeOperation = 'overlay'; // Use overlay blend mode
         mainCtx.drawImage(maskCanvas, 0, 0);
         mainCtx.globalCompositeOperation = 'source-over'; // Reset blend mode to default
     }
+
+    exportButton.addEventListener('click', function () {
+        const link = document.createElement('a');
+        link.download = 'colored_image.png';
+        link.href = mainCanvas.toDataURL('image/png');
+        link.click();
+    });
 
     function hexToR(h) { return parseInt(h.slice(1, 3), 16); }
     function hexToG(h) { return parseInt(h.slice(3, 5), 16); }
     function hexToB(h) { return parseInt(h.slice(5, 7), 16); }
 };
-
