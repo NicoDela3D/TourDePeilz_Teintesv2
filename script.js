@@ -1,37 +1,35 @@
 document.addEventListener("DOMContentLoaded", function () {
     const mainCanvas = document.getElementById('mainCanvas');
-    const maskCanvas = document.getElementById('maskCanvas');
     const colorPicker = document.getElementById('color1');
 
     const mainCtx = mainCanvas.getContext('2d');
-    const maskCtx = maskCanvas.getContext('2d');
 
-    const image = new Image();
-    const mask = new Image();
+    const baseImage = new Image();
+    const maskImage = new Image();
 
     const MAX_WIDTH = 800; // Set your desired maximum width
     const MAX_HEIGHT = 600; // Set your desired maximum height
 
-    image.crossOrigin = "Anonymous"; // Ensure CORS is handled
-    mask.crossOrigin = "Anonymous";  // Ensure CORS is handled
+    baseImage.crossOrigin = "Anonymous"; // Ensure CORS is handled
+    maskImage.crossOrigin = "Anonymous";  // Ensure CORS is handled
 
-    image.src = 'images/aerienneBase.jpg';
-    mask.src = 'images/aerienneMask1.jpg';
+    baseImage.src = 'images/aerienneBase.jpg';
+    maskImage.src = 'images/aerienneMask1.jpg';
 
-    image.onload = function () {
+    baseImage.onload = function () {
         console.log("Base image loaded.");
         resizeAndDrawImages();
     };
 
-    mask.onload = function () {
+    maskImage.onload = function () {
         console.log("Mask image loaded.");
         resizeAndDrawImages();
     };
 
     function resizeAndDrawImages() {
-        if (!image.complete || !mask.complete) return;
+        if (!baseImage.complete || !maskImage.complete) return;
 
-        let { width, height } = image;
+        let { width, height } = baseImage;
         if (width > MAX_WIDTH || height > MAX_HEIGHT) {
             const aspectRatio = width / height;
             if (width > MAX_WIDTH) {
@@ -46,13 +44,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         mainCanvas.width = width;
         mainCanvas.height = height;
-        maskCanvas.width = width;
-        maskCanvas.height = height;
 
-        mainCtx.drawImage(image, 0, 0, width, height);
-        maskCtx.drawImage(mask, 0, 0, width, height);
-
-        updateCanvas();
+        mainCtx.drawImage(baseImage, 0, 0, width, height);
+        applyMask(maskImage, colorPicker.value, width, height);
     }
 
     colorPicker.addEventListener('input', updateCanvas);
@@ -60,26 +54,34 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateCanvas() {
         console.log("Updating canvas with color:", colorPicker.value);
         mainCtx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
-        mainCtx.drawImage(image, 0, 0, mainCanvas.width, mainCanvas.height);
-
-        applyMask(maskCtx, colorPicker.value, maskCanvas);
+        mainCtx.drawImage(baseImage, 0, 0, mainCanvas.width, mainCanvas.height);
+        applyMask(maskImage, colorPicker.value, mainCanvas.width, mainCanvas.height);
     }
 
-    function applyMask(ctx, color, maskCanvas) {
-        const imageData = ctx.getImageData(0, 0, maskCanvas.width, maskCanvas.height);
+    function applyMask(mask, color, width, height) {
+        const maskCanvas = document.createElement('canvas');
+        maskCanvas.width = width;
+        maskCanvas.height = height;
+        const maskCtx = maskCanvas.getContext('2d');
+        maskCtx.drawImage(mask, 0, 0, width, height);
+
+        const imageData = maskCtx.getImageData(0, 0, width, height);
         const data = imageData.data;
+
+        const r = hexToR(color);
+        const g = hexToG(color);
+        const b = hexToB(color);
 
         for (let i = 0; i < data.length; i += 4) {
             if (data[i] > 200 && data[i + 1] > 200 && data[i + 2] > 200 && data[i + 3] > 0) { // If white and alpha > 0
-                data[i] = hexToR(color);
-                data[i + 1] = hexToG(color);
-                data[i + 2] = hexToB(color);
+                data[i] = r;
+                data[i + 1] = g;
+                data[i + 2] = b;
             }
         }
 
-        ctx.putImageData(imageData, 0, 0);
-        mainCtx.globalCompositeOperation = 'source-over';
-        mainCtx.drawImage(maskCanvas, 0, 0, mainCanvas.width, mainCanvas.height);
+        maskCtx.putImageData(imageData, 0, 0);
+        mainCtx.drawImage(maskCanvas, 0, 0);
     }
 
     function hexToR(h) { return parseInt(h.slice(1, 3), 16); }
