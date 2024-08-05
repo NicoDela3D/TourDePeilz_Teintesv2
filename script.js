@@ -22,7 +22,7 @@ window.onload = function () {
     baseImage.src = 'images/aerienneBase.jpg';
     maskImage.src = 'images/aerienneMask1.png';
 
-    let maskCanvas, maskCtx;
+    let maskCanvas, maskCtx, originalMaskData;
 
     baseImage.onload = function () {
         console.log("Base image loaded.");
@@ -61,6 +61,7 @@ window.onload = function () {
 
         // Draw the mask image onto the intermediate canvas once
         maskCtx.drawImage(maskImage, 0, 0, width, height);
+        originalMaskData = maskCtx.getImageData(0, 0, width, height);
 
         mainCtx.drawImage(baseImage, 0, 0, width, height);
         updateCanvas();
@@ -77,15 +78,8 @@ window.onload = function () {
     }
 
     function applyColorMask(color, width, height) {
-        // Reset the mask canvas
-        maskCtx.clearRect(0, 0, width, height);
-        maskCtx.drawImage(maskImage, 0, 0, width, height);
-
-        // Check if the selected color is white
-        if (color.toUpperCase() === '#FFFFFF') {
-            mainCtx.drawImage(maskCanvas, 0, 0, width, height);
-            return;
-        }
+        // Reset the mask canvas with the original mask data
+        maskCtx.putImageData(originalMaskData, 0, 0);
 
         // Get the image data from the mask canvas
         const imageData = maskCtx.getImageData(0, 0, width, height);
