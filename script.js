@@ -80,16 +80,22 @@ window.onload = function () {
 
         for (let i = 0; i < data.length; i += 4) {
             if (data[i + 3] > 0) { // If alpha > 0
-                data[i] = r;     // Red
-                data[i + 1] = g; // Green
-                data[i + 2] = b; // Blue
+                data[i] = (data[i] * r) / 255;     // Red
+                data[i + 1] = (data[i + 1] * g) / 255; // Green
+                data[i + 2] = (data[i + 2] * b) / 255; // Blue
             }
         }
 
         maskCtx.putImageData(imageData, 0, 0);
-        mainCtx.globalCompositeOperation = 'multiply'; // Use overlay blend mode
+        mainCtx.globalCompositeOperation = 'multiply'; // Use multiply blend mode
         mainCtx.drawImage(maskCanvas, 0, 0);
         mainCtx.globalCompositeOperation = 'source-over'; // Reset blend mode to default
+
+        // Draw the color hex code in the bottom right corner
+        mainCtx.font = '20px Arial';
+        mainCtx.fillStyle = '#000000'; // Black text
+        mainCtx.textAlign = 'right';
+        mainCtx.fillText(`Color 1 = ${color}`, width - 10, height - 10);
     }
 
     exportButton.addEventListener('click', function () {
