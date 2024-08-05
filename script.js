@@ -12,14 +12,14 @@ window.onload = function () {
     const baseImage = new Image();
     const maskImage = new Image();
 
-    const MAX_WIDTH = 800; // Set your desired maximum width
-    const MAX_HEIGHT = 600; // Set your desired maximum height
+    const MAX_WIDTH = 800;
+    const MAX_HEIGHT = 600;
 
-    baseImage.crossOrigin = "Anonymous"; // Ensure CORS is handled
-    maskImage.crossOrigin = "Anonymous";  // Ensure CORS is handled
+    baseImage.crossOrigin = "Anonymous";
+    maskImage.crossOrigin = "Anonymous";
 
     baseImage.src = 'images/aerienneBase.jpg';
-    maskImage.src = 'images/aerienneMask1.png'; // Use PNG mask image with alpha channel
+    maskImage.src = 'images/aerienneMask1.png';
 
     baseImage.onload = function () {
         console.log("Base image loaded.");
@@ -78,16 +78,17 @@ window.onload = function () {
         const b = hexToB(color);
 
         for (let i = 0; i < data.length; i += 4) {
-            // If alpha > 0, change the color while keeping the alpha value
-            if (data[i + 3] > 0) {
-                data[i] = r;     // Red
-                data[i + 1] = g; // Green
-                data[i + 2] = b; // Blue
+            if (data[i + 3] > 0) { // If alpha > 0
+                data[i] = (data[i] * r) / 255;     // Red
+                data[i + 1] = (data[i + 1] * g) / 255; // Green
+                data[i + 2] = (data[i + 2] * b) / 255; // Blue
             }
         }
 
         maskCtx.putImageData(imageData, 0, 0);
-        mainCtx.drawImage(maskCanvas, 0, 0, width, height);
+        mainCtx.globalCompositeOperation = 'multiply'; // Use multiply blend mode
+        mainCtx.drawImage(maskCanvas, 0, 0);
+        mainCtx.globalCompositeOperation = 'source-over'; // Reset blend mode to default
     }
 
     function hexToR(h) { return parseInt(h.slice(1, 3), 16); }
