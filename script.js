@@ -86,12 +86,10 @@ window.onload = function () {
         }
 
         maskCtx.putImageData(imageData, 0, 0);
-        mainCtx.drawImage(maskCanvas, 0, 0);
-
-        // Blend the mask with the base image
-        mainCtx.globalCompositeOperation = 'multiply';
-        mainCtx.drawImage(maskCanvas, 0, 0);
+        
+        // Blend the mask with the base image using 'source-over'
         mainCtx.globalCompositeOperation = 'source-over';
+        mainCtx.drawImage(maskCanvas, 0, 0, width, height);
     }
 
     function hexToR(h) { return parseInt(h.slice(1, 3), 16); }
