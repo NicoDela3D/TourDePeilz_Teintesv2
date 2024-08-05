@@ -19,7 +19,7 @@ window.onload = function () {
     maskImage.crossOrigin = "Anonymous";  // Ensure CORS is handled
 
     baseImage.src = 'images/aerienneBase.jpg';
-    maskImage.src = 'images/aerienneMask1.jpg';
+    maskImage.src = 'images/aerienneMask1.png'; // Use PNG mask image with alpha channel
 
     baseImage.onload = function () {
         console.log("Base image loaded.");
@@ -78,7 +78,8 @@ window.onload = function () {
         const b = hexToB(color);
 
         for (let i = 0; i < data.length; i += 4) {
-            if (data[i] > 200 && data[i + 1] > 200 && data[i + 2] > 200 && data[i + 3] > 0) { // If white and alpha > 0
+            // If alpha > 0, change the color while keeping the alpha value
+            if (data[i + 3] > 0) {
                 data[i] = r;     // Red
                 data[i + 1] = g; // Green
                 data[i + 2] = b; // Blue
@@ -86,9 +87,6 @@ window.onload = function () {
         }
 
         maskCtx.putImageData(imageData, 0, 0);
-        
-        // Blend the mask with the base image using 'source-over'
-        mainCtx.globalCompositeOperation = 'source-over';
         mainCtx.drawImage(maskCanvas, 0, 0, width, height);
     }
 
