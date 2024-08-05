@@ -1,6 +1,11 @@
-document.addEventListener("DOMContentLoaded", function () {
+window.onload = function () {
     const mainCanvas = document.getElementById('mainCanvas');
     const colorPicker = document.getElementById('color1');
+
+    if (!mainCanvas || !colorPicker) {
+        console.error('Cannot find the canvas or color picker elements.');
+        return;
+    }
 
     const mainCtx = mainCanvas.getContext('2d');
 
@@ -87,4 +92,4 @@ document.addEventListener("DOMContentLoaded", function () {
     function hexToR(h) { return parseInt(h.slice(1, 3), 16); }
     function hexToG(h) { return parseInt(h.slice(3, 5), 16); }
     function hexToB(h) { return parseInt(h.slice(5, 7), 16); }
-});
+};
