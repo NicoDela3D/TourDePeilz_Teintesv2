@@ -13,8 +13,8 @@ window.onload = function () {
     const baseImage = new Image();
     const maskImage = new Image();
 
-    const MAX_WIDTH = 800;
-    const MAX_HEIGHT = 600;
+    const MAX_WIDTH = 1920;
+    const MAX_HEIGHT = 1080;
 
     baseImage.crossOrigin = "Anonymous";
     maskImage.crossOrigin = "Anonymous";
@@ -87,7 +87,7 @@ window.onload = function () {
         }
 
         maskCtx.putImageData(imageData, 0, 0);
-        mainCtx.globalCompositeOperation = 'overlay'; // Use overlay blend mode
+        mainCtx.globalCompositeOperation = 'multiply'; // Use overlay blend mode
         mainCtx.drawImage(maskCanvas, 0, 0);
         mainCtx.globalCompositeOperation = 'source-over'; // Reset blend mode to default
     }
